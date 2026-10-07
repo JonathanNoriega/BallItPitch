@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BallIt — Corrige tu tiro con IA</title>
+  <meta name="description" content="BallIt analiza tu técnica de tiro desde un video, dibuja tu esqueleto y tus ángulos, y te dice exactamente qué ajustar en lenguaje simple." />
+
+  <!-- Tipografía: Oswald (display condensada atlética) + Inter (cuerpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Salto de accesibilidad -->
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <!-- ============================================================
+       NAV
+       ============================================================ -->
+  <header class="nav" id="nav">
+    <div class="shell nav__inner">
+      <a href="#hero" class="logo" aria-label="BallIt — inicio">
+        <span class="logo__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28">
+            <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <path d="M2 16h28M16 2v28M6 6l20 20M26 6L6 26" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+        </span>
+        <span class="logo__word">Ball<em>It</em></span>
+      </a>
+
+      <nav class="nav__links" aria-label="Secciones">
+        <a href="#problema">Problema</a>
+        <a href="#solucion">Solución</a>
+        <a href="#demo">Demo</a>
+        <a href="#como">Cómo funciona</a>
+      </nav>
+
+      <a href="#demo" class="btn btn--ghost nav__cta">Ver la demo</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================================================
+         HERO — asimétrico, el mockup invade desde la derecha,
+         el arco de trayectoria cruza por detrás
+         ============================================================ -->
+    <section class="hero" id="hero">
+      <!-- Arco de trayectoria del tiro (se dibuja al cargar) -->
+      <svg class="shot-arc" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <path id="arcPath" d="M-40 640 C 320 540, 540 120, 900 150 C 1040 162, 1140 240, 1240 360"
+              fill="none" stroke="var(--orange)" stroke-width="3" stroke-linecap="round"/>
+        <circle id="arcBall" r="9" fill="var(--orange)" />
+      </svg>
+
+      <div class="shell hero__grid">
+        <div class="hero__copy">
+          <p class="hero__tag" aria-hidden="true">
+            <span class="tick"></span> Breakdown de tiro, cuadro por cuadro
+          </p>
+          <h1 class="hero__title">
+            <span class="line">Corrige tu tiro</span>
+            <span class="line">con <span class="hl">IA</span></span>
+          </h1>
+          <p class="hero__kicker">No solo un número — un consejo que sí entiendes.</p>
+          <p class="hero__sub">
+            BallIt analiza tu técnica de tiro desde un video, dibuja tu esqueleto y
+            tus ángulos, y te dice exactamente qué ajustar — en lenguaje simple,
+            no en grados sueltos.
+          </p>
+          <div class="hero__actions">
+            <a href="#demo" class="btn btn--solid">Ver cómo se ve</a>
+            <span class="hero__hint">Sin cuentas. Sin equipo especial.</span>
+          </div>
+        </div>
+
+        <!-- Mockup de teléfono: comparte markup con la demo -->
+        <div class="hero__device">
+          <div class="phone" data-skeleton>
+            <div class="phone__screen">
+              <div class="shot">
+                <div class="shot__glow" aria-hidden="true"></div>
+
+                <div class="shot__score">
+                  <span class="shot__score-label">Codo</span>
+                  <span class="shot__score-num">72</span>
+                  <span class="shot__score-tot">/100</span>
+                  <span class="verdict verdict--yellow" role="img" aria-label="veredicto amarillo">🟡</span>
+                </div>
+
+                <svg class="shot__skeleton" viewBox="0 0 120 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                  <!-- Figura en posición de set-point: cabeza, tronco, brazo de
+                       tiro doblado en el codo, piernas desde la cadera.
+                       Articulaciones conectadas para que se lea como una persona. -->
+                  <g class="bone" stroke="var(--orange)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <!-- tronco: hombro -> cadera -->
+                    <line x1="60" y1="58" x2="58" y2="140"/>
+                    <!-- brazo de tiro: hombro -> codo -> muñeca -->
+                    <line x1="60" y1="58" x2="80" y2="86"/>
+                    <line x1="80" y1="86" x2="70" y2="52"/>
+                    <!-- pierna izquierda: cadera -> rodilla -> tobillo -->
+                    <line x1="58" y1="140" x2="46" y2="192"/>
+                    <line x1="46" y1="192" x2="48" y2="244"/>
+                    <!-- pierna derecha: cadera -> rodilla -> tobillo -->
+                    <line x1="58" y1="140" x2="72" y2="192"/>
+                    <line x1="72" y1="192" x2="76" y2="244"/>
+                  </g>
+                  <!-- balón sobre la muñeca -->
+                  <circle class="ball" cx="70" cy="42" r="11" fill="none" stroke="var(--orange)" stroke-width="2.5"/>
+                  <!-- cabeza -->
+                  <circle class="joint" cx="52" cy="42" r="11" fill="none" stroke="var(--mint)" stroke-width="2.5"/>
+                  <!-- articulaciones -->
+                  <g class="joint" fill="var(--mint)">
+                    <circle cx="60" cy="58" r="4"/><circle cx="80" cy="86" r="4"/>
+                    <circle cx="70" cy="52" r="4"/><circle cx="58" cy="140" r="4"/>
+                    <circle cx="46" cy="192" r="4"/><circle cx="72" cy="192" r="4"/>
+                    <circle cx="48" cy="244" r="4"/><circle cx="76" cy="244" r="4"/>
+                  </g>
+                  <!-- marcador de ángulo en el codo (hombro-codo-muñeca) -->
+                  <path class="angle-mark" d="M60 58 L80 86 L70 52" stroke="var(--orange)" stroke-width="1.5" fill="none" opacity="0.45"/>
+                </svg>
+
+                <span class="shot__angle">Codo 41°</span>
+                <div class="shot__tip">
+                  <strong>Consejo:</strong> el codo abre hacia afuera. Mantén el
+                  antebrazo recto bajo el balón, como metiendo la mano en un frasco.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PROBLEMA — afirmación grande + tres puntos con jerarquía
+         tipográfica (no tarjetas idénticas)
+         ============================================================ -->
+    <section class="problem" id="problema">
+      <div class="shell problem__grid">
+        <div class="problem__lead">
+          <h2 class="problem__headline">
+            Entrenas solo.<br>Nadie te está<br><span class="hl">mirando el codo.</span>
+          </h2>
+        </div>
+        <ul class="problem__list">
+          <li class="prob">
+            <span class="prob__stat">solo</span>
+            <p>El jugador amateur practica sin un entrenador constante que le corrija la técnica tiro a tiro.</p>
+          </li>
+          <li class="prob">
+            <span class="prob__stat">54°</span>
+            <p>Las apps genéricas tiran un dato y ya. Un número suelto no te dice nada sobre qué hacer distinto.</p>
+          </li>
+          <li class="prob">
+            <span class="prob__stat">∞</span>
+            <p>Sin feedback claro y accionable, los errores de técnica se refuerzan hasta volverse permanentes.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SOLUCIÓN — jerarquía desigual: una feature destacada (overlay)
+         + tres de apoyo
+         ============================================================ -->
+    <section class="solution" id="solucion">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-head__title">Qué hace BallIt</h2>
+          <p class="section-head__lead">
+            Convierte un video de tu tiro en consejos concretos — mediciones reales
+            traducidas a algo que puedes aplicar en la cancha.
+          </p>
+        </header>
+
+        <div class="feat">
+          <!-- Feature destacada -->
+          <article class="feat__hero">
+            <div class="feat__hero-text">
+              <h3>Overlay de esqueleto y ángulos sobre tu propio video</h3>
+              <p>
+                Dibuja tu pose y tus ángulos directamente sobre el clip, cuadro por
+                cuadro. Ves tu tiro con las líneas encima — exactamente dónde está
+                el codo, dónde debería estar.
+              </p>
+            </div>
+            <div class="feat__hero-visual" aria-hidden="true">
+              <svg viewBox="0 0 120 160" width="120" height="160">
+                <g stroke="var(--orange)" stroke-width="3" stroke-linecap="round" fill="none">
+                  <line x1="60" y1="30" x2="60" y2="78"/>
+                  <line x1="60" y1="40" x2="84" y2="60"/>
+                  <line x1="84" y1="60" x2="76" y2="30"/>
+                  <line x1="60" y1="78" x2="48" y2="120"/>
+                  <line x1="60" y1="78" x2="74" y2="120"/>
+                </g>
+                <g fill="var(--mint)">
+                  <circle cx="60" cy="40" r="4"/><circle cx="84" cy="60" r="4"/>
+                  <circle cx="76" cy="30" r="4"/><circle cx="60" cy="78" r="4"/>
+                </g>
+                <circle cx="60" cy="18" r="9" fill="none" stroke="var(--mint)" stroke-width="2.5"/>
+              </svg>
+            </div>
+          </article>
+
+          <!-- Features de apoyo -->
+          <article class="feat__item">
+            <span class="feat__glyph" aria-hidden="true">“”</span>
+            <h3>Consejos redactados por IA</h3>
+            <p>A partir de mediciones reales. Nunca inventa números: los traduce a lenguaje simple. "Intenta esto", no "54 grados".</p>
+          </article>
+
+          <article class="feat__item feat__item--score">
+            <span class="feat__bignum" aria-hidden="true">0–100</span>
+            <h3>Puntaje de alineación del codo</h3>
+            <p>Un veredicto claro acompaña cada tiro:
+              <span class="verdict verdict--green">🟢 bien</span>,
+              <span class="verdict verdict--yellow">🟡 casi</span>,
+              <span class="verdict verdict--red">🔴 a corregir</span>.
+            </p>
+          </article>
+
+          <article class="feat__item">
+            <span class="feat__glyph" aria-hidden="true">↗</span>
+            <h3>Historial y antes/después</h3>
+            <p>Compara tus tiros a lo largo del tiempo. Mira tu progreso real, no una sensación.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DEMO — el teléfono protagonista sobre fondo oscuro
+         ============================================================ -->
+    <section class="demo" id="demo">
+      <div class="shell demo__grid">
+        <div class="demo__intro">
+          <h2 class="demo__title">Así se ve<br>en acción</h2>
+          <p class="demo__lead">
+            La pantalla de Resultados: tu video con el esqueleto, los ángulos medidos
+            y el consejo de la IA — todo en un solo lugar.
+          </p>
+          <p class="demo__meta">
+            <span class="tick"></span>
+            Mockup estático. Se reemplaza por la grabación real de la app antes del pitch.
+          </p>
+        </div>
+
+        <div class="demo__stage">
+          <!-- DEMO: reemplazar con video/gif real del overlay.
+               Arrastra tu screen recording de la app de Electron dentro de
+               .phone__screen, sustituyendo el bloque .shot. -->
+          <div class="phone" data-skeleton>
+            <div class="phone__screen">
+              <div class="shot">
+                <div class="shot__glow" aria-hidden="true"></div>
+
+                <div class="shot__score">
+                  <span class="shot__score-label">Codo</span>
+                  <span class="shot__score-num">72</span>
+                  <span class="shot__score-tot">/100</span>
+                  <span class="verdict verdict--yellow" role="img" aria-label="veredicto amarillo">🟡</span>
+                </div>
+
+                <svg class="shot__skeleton" viewBox="0 0 120 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                  <g class="bone" stroke="var(--orange)" stroke-width="3" stroke-linecap="round" fill="none">
+                    <line x1="62" y1="56" x2="62" y2="130"/>
+                    <line x1="62" y1="66" x2="84" y2="92"/>
+                    <line x1="84" y1="92" x2="74" y2="60"/>
+                    <line x1="62" y1="130" x2="50" y2="186"/>
+                    <line x1="50" y1="186" x2="54" y2="240"/>
+                    <line x1="62" y1="130" x2="76" y2="186"/>
+                    <line x1="76" y1="186" x2="80" y2="240"/>
+                  </g>
+                  <circle class="joint" cx="62" cy="42" r="12" fill="none" stroke="var(--mint)" stroke-width="2.5"/>
+                  <g class="joint" fill="var(--mint)">
+                    <circle cx="62" cy="66" r="4"/><circle cx="84" cy="92" r="4"/>
+                    <circle cx="74" cy="60" r="4"/><circle cx="62" cy="130" r="4"/>
+                    <circle cx="50" cy="186" r="4"/><circle cx="76" cy="186" r="4"/>
+                    <circle cx="54" cy="240" r="4"/><circle cx="80" cy="240" r="4"/>
+                  </g>
+                  <path class="angle-mark" d="M84 92 L74 60 M84 92 L62 66" stroke="var(--orange)" stroke-width="1.5" fill="none" opacity="0.5"/>
+                </svg>
+
+                <span class="shot__angle">Codo 41°</span>
+                <div class="shot__tip">
+                  <strong>Consejo:</strong> el codo abre hacia afuera. Mantén el
+                  antebrazo recto bajo el balón, como metiendo la mano en un frasco.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CÓMO FUNCIONA — proceso real, tratado como cronología/marcador
+         ============================================================ -->
+    <section class="how" id="como">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-head__title">De un video a un consejo que entiendes</h2>
+          <p class="section-head__lead">
+            Mediciones reales, no estimaciones vagas. La IA solo traduce los
+            números — nunca los inventa.
+          </p>
+        </header>
+
+        <ol class="pipeline">
+          <li class="phase">
+            <span class="phase__k">01</span>
+            <h3>Video</h3>
+            <p>Grabas tu tiro con cualquier cámara. Sin sensores, sin traje, sin estudio.</p>
+          </li>
+          <li class="phase">
+            <span class="phase__k">02</span>
+            <h3>Detección de pose</h3>
+            <p>Ubicamos tus articulaciones cuadro por cuadro y dibujamos el esqueleto.</p>
+          </li>
+          <li class="phase">
+            <span class="phase__k">03</span>
+            <h3>Medición de ángulos</h3>
+            <p>Calculamos la alineación del codo y los ángulos clave del tiro.</p>
+          </li>
+          <li class="phase">
+            <span class="phase__k">04</span>
+            <h3>Consejo con IA</h3>
+            <p>La IA redacta el consejo a partir de esos números reales, en lenguaje simple.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CIERRE — proyecto de clase: qué construimos, qué sigue
+         ============================================================ -->
+    <section class="close" id="cierre">
+      <div class="shell close__grid">
+        <div class="close__intro">
+          <h2 class="close__title">Lo que construimos<br>y hacia dónde va</h2>
+          <p class="close__lead">
+            BallIt pasó de una idea a una app de escritorio funcional que analiza un
+            tiro real y devuelve un consejo entendible. Esto es lo que sigue.
+          </p>
+        </div>
+
+        <ol class="roadmap">
+          <li class="road road--done">
+            <span class="road__badge">Hecho</span>
+            <h3>MVP de escritorio</h3>
+            <p>Analiza un video, dibuja el esqueleto, mide el ángulo del codo y redacta un consejo con IA.</p>
+          </li>
+          <li class="road road--now">
+            <span class="road__badge">Ahora</span>
+            <h3>Puntaje y veredicto 0–100</h3>
+            <p>Afinando el puntaje de alineación y el semáforo 🟢🟡🔴 contra tiros de referencia.</p>
+          </li>
+          <li class="road">
+            <span class="road__badge">Siguiente</span>
+            <h3>Historial y antes/después</h3>
+            <p>Guardar sesiones para comparar tiros en el tiempo y mostrar progreso real.</p>
+          </li>
+          <li class="road">
+            <span class="road__badge">Luego</span>
+            <h3>Más ángulos y móvil</h3>
+            <p>Rodilla, muñeca y liberación — y llevar el análisis al teléfono para grabar y revisar en cancha.</p>
+          </li>
+        </ol>
+
+        <a href="#hero" class="btn btn--solid close__cta">Volver al inicio</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="shell footer__inner">
+      <a href="#hero" class="logo logo--sm" aria-label="BallIt — inicio">
+        <span class="logo__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="24" height="24">
+            <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <path d="M2 16h28M16 2v28M6 6l20 20M26 6L6 26" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+        </span>
+        <span class="logo__word">Ball<em>It</em></span>
+      </a>
+      <p class="footer__note">Corrige tu tiro con IA · Proyecto de clase · 2026</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
