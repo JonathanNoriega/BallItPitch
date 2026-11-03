@@ -22,7 +22,7 @@
   /* ============================================================
      CONFIGURACIÓN — cambia solo estas dos líneas
      ============================================================ */
-  var GA4_ID = "G-1B30K33HQ";             // ← tu Measurement ID de GA4
+  var GA4_ID = "G-G1B30K33HQ";            // ← tu Measurement ID de GA4
   var FORM_ENDPOINT = "https://formspree.io/f/xaeelzwe";                 // ← Formspree / Apps Script / Firestore. Vacío = modo demo (no envía a red)
 
   var CONSENT_KEY = "ballit_consent";     // 'granted' | 'denied'
