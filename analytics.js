@@ -84,15 +84,14 @@
 
   var gaLoaded = false;
   var gaValid = !!GA4_ID && GA4_ID.indexOf("G-") === 0;
-  // Cola de eventos disparados ANTES de dar consentimiento. Al aceptar, se
-  // vacían hacia GA4 para no perder clics/conversiones del primer momento.
-  var pendingEvents = [];
 
+  // Carga el tag base de GA4 de inmediato (patrón recomendado por Google con
+  // Consent Mode): así el detector de Google SÍ encuentra el tag. NO se
+  // recolectan datos ni cookies hasta que el usuario acepta, porque
+  // analytics_storage arranca en 'denied' (ver gtag consent default arriba).
   function loadGA() {
     if (gaLoaded) return;
     if (!gaValid) {
-      // Sin ID válido: no cargamos red, pero dejamos el tracking en modo log
-      // para poder verificar los eventos en consola durante desarrollo.
       console.info("[BallIt] GA4_ID placeholder: eventos se registran en consola, no se envían.");
       gaLoaded = true;
       return;
@@ -104,23 +103,18 @@
     document.head.appendChild(s);
 
     gtag("js", new Date());
-    // variant como user property en toda la sesión
     gtag("config", GA4_ID, {
       user_properties: { variant: VARIANT }
     });
-    // Reafirma la user property (algunas vistas la quieren por set)
     gtag("set", "user_properties", { variant: VARIANT });
 
     gaLoaded = true;
-
-    // Vaciar la cola de eventos previos al consentimiento.
-    pendingEvents.forEach(function (ev) { window.gtag("event", ev.name, ev.params); });
-    pendingEvents = [];
   }
 
+  // Al aceptar, se concede el almacenamiento; el tag ya está cargado.
   function grantConsent() {
     gtag("consent", "update", { analytics_storage: "granted" });
-    loadGA();
+    loadGA(); // no-op si ya está cargado
   }
 
   /* ============================================================
@@ -130,13 +124,10 @@
      ============================================================ */
   function track(eventName, params) {
     var payload = Object.assign({ variant: VARIANT }, params || {});
-    if (gaValid && gaLoaded && typeof window.gtag === "function") {
+    if (gaValid && typeof window.gtag === "function") {
+      // El tag ya está cargado desde el inicio. Consent Mode retiene los
+      // eventos hasta que se concede analytics_storage y los envía al aceptar.
       window.gtag("event", eventName, payload);
-    } else if (gaValid) {
-      // ID válido pero aún sin consentimiento: encolar para no perder el evento.
-      // Límite defensivo para que un bucle no infle memoria.
-      if (pendingEvents.length < 100) pendingEvents.push({ name: eventName, params: payload });
-      console.debug("[BallIt event · en cola]", eventName, payload);
     } else {
       console.debug("[BallIt event]", eventName, payload);
     }
@@ -239,7 +230,10 @@
   };
 
   /* ============================================================
-     Consentimiento — banner sobrio; GA4 solo tras aceptar
+     Consentimiento — banner sobrio.
+     El tag GA4 SIEMPRE se carga (para que Google lo detecte), pero
+     Consent Mode mantiene analytics_storage en 'denied' hasta aceptar:
+     sin cookies ni datos recolectados hasta entonces.
      ============================================================ */
   function initConsent() {
     var banner = document.getElementById("consent");
@@ -248,8 +242,11 @@
     var saved;
     try { saved = localStorage.getItem(CONSENT_KEY); } catch (e) { saved = null; }
 
+    // Carga el tag base de inmediato en todos los casos (consent-gated).
+    loadGA();
+
     if (saved === "granted") { grantConsent(); return; }
-    if (saved === "denied") { return; } // respeta el rechazo, no mostramos otra vez
+    if (saved === "denied") { return; } // ya decidió no; no mostramos de nuevo
 
     if (banner) banner.hidden = false;
 
@@ -261,7 +258,7 @@
     if (reject) reject.addEventListener("click", function () {
       try { localStorage.setItem(CONSENT_KEY, "denied"); } catch (e) {}
       if (banner) banner.hidden = true;
-      // No se carga GA4. El resto del sitio funciona igual.
+      // El tag está cargado pero analytics_storage sigue 'denied': no recolecta.
     });
   }
 
