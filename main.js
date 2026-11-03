@@ -226,6 +226,20 @@
       });
     }
 
+    // Si el video sale de la vista mientras se reproduce, se pausa solo
+    // (p. ej. al hacer scroll) y el botón de play reaparece.
+    if (video && "IntersectionObserver" in window) {
+      var pauseObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting && !video.paused) {
+            video.pause();
+            btn.classList.remove("is-hidden");
+          }
+        });
+      }, { threshold: 0.35 });
+      pauseObs.observe(video);
+    }
+
     var started = false; // para no duplicar video_play al reanudar
 
     btn.addEventListener("click", function () {
