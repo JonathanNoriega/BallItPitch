@@ -807,15 +807,20 @@ img, svg { display: block; max-width: 100%; }
 .signup__checks { list-style: none; padding: 0; display: grid; gap: 10px; }
 .signup__checks li { color: var(--on-dark); font-size: 15px; display: flex; align-items: center; gap: 10px; }
 .signup__checks li::before {
-  content: "✓";
-  color: var(--orange);
-  font-weight: 800;
-  background: rgba(255,90,31,0.16);
+  content: "";
+  background: var(--orange);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") center / 16px no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") center / 16px no-repeat;
   width: 24px; height: 24px;
-  display: grid; place-items: center;
-  border-radius: 7px;
   flex: none;
 }
+/* botón "Abrir el prototipo" sobre el panel oscuro del signup */
+.signup__pitch .btn--outline {
+  margin-top: 22px;
+  color: #fff;
+  border-color: rgba(255,255,255,0.4);
+}
+.signup__pitch .btn--outline:hover { border-color: var(--orange); color: var(--orange); }
 
 .form {
   background: var(--white);
@@ -834,7 +839,8 @@ img, svg { display: block; max-width: 100%; }
 .form__row label span[aria-hidden] { color: var(--orange); }
 .form__opt { color: var(--ink-dim); font-weight: 400; }
 .form input,
-.form select {
+.form select,
+.form textarea {
   width: 100%;
   font-family: var(--body);
   font-size: 16px;
@@ -845,9 +851,38 @@ img, svg { display: block; max-width: 100%; }
   padding: 13px 14px;
   transition: border-color .14s ease, box-shadow .14s ease;
 }
+.form textarea { resize: vertical; min-height: 92px; line-height: 1.5; }
 .form input:focus,
-.form select:focus { outline: none; border-color: var(--orange); box-shadow: var(--focus); }
-.form input[aria-invalid="true"] { border-color: var(--red); }
+.form select:focus,
+.form textarea:focus { outline: none; border-color: var(--orange); box-shadow: var(--focus); }
+.form input[aria-invalid="true"],
+.form textarea[aria-invalid="true"] { border-color: var(--red); }
+
+/* Estrellas de puntuación: radios reales estilados. Orden invertido en el
+   HTML (5→1) para que el selector ~ ilumine de izquierda a derecha al pasar. */
+.rating { border: none; margin: 0 0 18px; padding: 0; }
+.rating legend { font-weight: 600; font-size: 14px; color: var(--navy); margin-bottom: 7px; padding: 0; }
+.rating legend span[aria-hidden] { color: var(--orange); }
+.rating__stars {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 32px;
+  line-height: 1;
+}
+.rating__stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.rating__stars label {
+  color: var(--line);
+  cursor: pointer;
+  transition: color .12s ease, transform .12s ease;
+}
+/* hover y selección: la estrella y todas a su derecha (anteriores en el DOM) */
+.rating__stars label:hover,
+.rating__stars label:hover ~ label,
+.rating__stars input:checked ~ label { color: var(--orange); }
+.rating__stars label:hover { transform: scale(1.1); }
+.rating__stars input:focus-visible + label { outline: none; box-shadow: var(--focus); border-radius: 6px; }
 .form__err { color: var(--red); font-size: 13px; margin-top: 6px; }
 .form .btn--block { margin-top: 4px; }
 .form__status { margin-top: 14px; font-size: 14.5px; font-weight: 600; min-height: 1.2em; }

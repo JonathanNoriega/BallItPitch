@@ -69,7 +69,8 @@ alcanzar significancia estadística en el A/B. En ese caso, la decisión no se
 abandona: se complementa con métodos cualitativos y de muestra pequeña, que
 además explican el *porqué* detrás de los números. **Entrevistas** a 5–8
 jugadores del público objetivo mostrándoles ambos titulares y preguntando cuál
-los haría dejar su correo y por qué; **pruebas de usabilidad moderadas** pidiendo
+los haría probar el prototipo y dejar su reseña, y por qué; **pruebas de
+usabilidad moderadas** pidiendo
 a la persona que complete el registro en voz alta para detectar fricción;
 **grabaciones de sesión y mapas de calor** (p. ej. con herramientas tipo
 Hotjar/Clarity) para ver hasta dónde llega la gente, dónde duda y dónde abandona;

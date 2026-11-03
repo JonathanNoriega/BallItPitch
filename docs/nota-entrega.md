@@ -13,19 +13,24 @@ traduce la medición en algo accionable, para el jugador de 18–25 años que
 entrena solo, se graba con el celular y no sabe qué está haciendo mal.
 
 ## CTA (llamado a la acción)
-**"Quiero probar BallIt"** — mismo texto en todos los puntos del sitio (nav,
-hero, pasos, costo de inacción y formulario final) para poder medirlo de forma
-consistente. Lleva siempre al formulario de registro de la lista de acceso.
+**"Quiero probar BallIt"** — mismo texto en todos los CTA principales (nav, hero,
+pasos, costo de inacción y precios), que abren el prototipo ya publicado en
+`https://ball-it-fd.vercel.app/` (nueva pestaña). Cada clic se mide como
+`click_cta` con su `cta_id`. El formulario final tiene su propio botón
+("Enviar mi reseña") que es la conversión.
 
 ## Métrica principal
 **Tasa de conversión visita → `generate_lead`**: porcentaje de sesiones en las
-que el visitante envía con éxito el formulario de registro (correo + nivel + mano
-de tiro opcional). Es el evento de conversión principal en GA4.
+que el visitante envía con éxito el formulario de **reseña** (puntuación 1–5 +
+comentario; nivel y correo opcionales) tras haber probado el prototipo. Es el
+evento de conversión principal en GA4.
 
 ## Métricas secundarias
 - `click_cta` (por `cta_id` y `cta_location`): qué CTA genera más clics.
 - `scroll_depth` (25 / 50 / 75 / 90 %): cuánto de la página se consume.
-- `form_start`: cuántos empiezan el formulario (para medir abandono vs. envío).
+- `form_start`: cuántos empiezan la reseña (para medir abandono vs. envío).
+- `click_cta` con `cta_id="registro_abrir_app"` y los CTA principales: clics que
+  abren el prototipo (intención de probarlo).
 - `video_play` / `video_complete`: interés en ver el producto en acción.
 - `faq_open` (por pregunta): qué objeciones pesan antes de decidir.
 - Engagement time y engaged sessions / bounce (nativos de GA4).
@@ -41,15 +46,18 @@ KPI: tasa de conversión visita → `generate_lead` por variante. Detalle comple
 en `docs/hipotesis-ab.md`.
 
 ## Próximos 3 pasos del usuario
-1. **Deja tu correo y recibe acceso** al prototipo de escritorio.
+1. **Abre el prototipo** (app de escritorio, gratis) en `https://ball-it-fd.vercel.app/`.
 2. **Sube o graba un video de tu tiro** (con el celular basta).
-3. **Recibe tu análisis y sigue tu progreso**, comparando antes/después.
+3. **Recibe tu análisis y déjanos tu reseña** sobre lo que te mostró.
 
 ---
 
 ## Datos reales pendientes
-- ID de GA4: **[COMPLETAR]** (hoy `G-XXXXXXXXXX` en `analytics.js`).
-- Endpoint del formulario: **[COMPLETAR]** (constante `FORM_ENDPOINT` en `analytics.js`).
+- ID de GA4: **completado** (`G-1B30K33HQ` en `analytics.js`). Marcar
+  `generate_lead` como evento clave en GA4 (ver README).
+- Endpoint del formulario de reseñas: **[COMPLETAR]** (constante `FORM_ENDPOINT`
+  en `analytics.js`; Formspree).
+- Prototipo: **publicado** en `https://ball-it-fd.vercel.app/`.
 - Testimonios reales: **[COMPLETAR]** (3 bloques en la sección de confianza).
 - Métricas reales de tracción: **[COMPLETAR]** (3 contadores en la sección de confianza).
 - Video/GIF real de la demo: **[COMPLETAR]** (contenedor marcado en la sección "producto").

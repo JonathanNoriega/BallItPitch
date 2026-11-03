@@ -43,6 +43,9 @@
     var status = document.getElementById("formStatus");
     var email = document.getElementById("email");
     var emailErr = document.getElementById("emailErr");
+    var review = document.getElementById("review");
+    var reviewErr = document.getElementById("reviewErr");
+    var ratingErr = document.getElementById("ratingErr");
     var submitBtn = form.querySelector('button[type="submit"]');
 
     function setStatus(msg, kind) {
@@ -55,26 +58,41 @@
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
     }
 
+    function getRating() {
+      var checked = form.querySelector('input[name="rating"]:checked');
+      return checked ? checked.value : "";
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      // Validación de correo
-      if (!email.value || !validEmail(email.value)) {
+      // Puntuación obligatoria
+      if (!getRating()) {
+        if (ratingErr) ratingErr.hidden = false;
+        var firstStar = form.querySelector('input[name="rating"]');
+        if (firstStar) firstStar.focus();
+        return;
+      }
+      if (ratingErr) ratingErr.hidden = true;
+
+      // Reseña obligatoria
+      if (!review || !review.value.trim()) {
+        if (review) { review.setAttribute("aria-invalid", "true"); review.focus(); }
+        if (reviewErr) reviewErr.hidden = false;
+        return;
+      }
+      if (review) review.removeAttribute("aria-invalid");
+      if (reviewErr) reviewErr.hidden = true;
+
+      // Correo OPCIONAL: solo se valida si el usuario escribió algo.
+      if (email && email.value && !validEmail(email.value)) {
         email.setAttribute("aria-invalid", "true");
         if (emailErr) emailErr.hidden = false;
         email.focus();
         return;
       }
-      email.removeAttribute("aria-invalid");
+      if (email) email.removeAttribute("aria-invalid");
       if (emailErr) emailErr.hidden = true;
-
-      // Nivel obligatorio
-      var level = form.querySelector("#level");
-      if (level && !level.value) {
-        setStatus("Elige tu nivel de juego.", "err");
-        level.focus();
-        return;
-      }
 
       // Honeypot anti-spam: campo oculto que un humano nunca llena.
       // Si viene con algo, es un bot: fingimos éxito y NO enviamos ni
@@ -122,9 +140,12 @@
 
     function onSuccess() {
       if (submitBtn) submitBtn.disabled = false;
-      setStatus("¡Listo! Revisa tu correo: te escribiremos con el acceso al prototipo.", "ok");
+      setStatus("¡Gracias por tu reseña! Nos ayuda a mejorar BallIt.", "ok");
       // Conversión: solo aquí.
-      if (A) A.generateLead({ level: (form.querySelector("#level") || {}).value || "" });
+      if (A) A.generateLead({
+        rating: getRating(),
+        level: (form.querySelector("#level") || {}).value || ""
+      });
       form.reset();
       fillHiddenFields(); // repoblar ocultos tras el reset
     }
@@ -258,6 +279,25 @@
   }
 
   /* ------------------------------------------------------------
+     7) FAQ en acordeón: al abrir una pregunta, las demás se cierran.
+        analytics.js escucha 'toggle' para faq_open pero solo registra
+        al ABRIR (item.open === true), así que cerrar las otras aquí no
+        genera eventos falsos.
+     ------------------------------------------------------------ */
+  function wireFaqAccordion() {
+    var items = document.querySelectorAll(".faq__item");
+    if (!items.length) return;
+    items.forEach(function (item) {
+      item.addEventListener("toggle", function () {
+        if (!item.open) return;
+        items.forEach(function (other) {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------
      Arranque
      ------------------------------------------------------------ */
   function init() {
@@ -267,6 +307,7 @@
     animateShotArc();
     wireSkeletons();
     wireCounters();
+    wireFaqAccordion();
   }
 
   if (document.readyState === "loading") {
