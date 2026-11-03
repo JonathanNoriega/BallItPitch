@@ -13,15 +13,15 @@
   <meta property="og:type" content="website" />
 
   <!-- ================================================================
-       ⚠️  PLACEHOLDERS PENDIENTES DE LLENAR CON DATOS REALES
+       PLACEHOLDERS PENDIENTES DE LLENAR CON DATOS REALES
        (buscar estos marcadores en el documento antes de publicar en serio)
        ----------------------------------------------------------------
-       1. GA4_MEASUREMENT_ID  → en analytics.js  (const GA4_ID)   actual: G-XXXXXXXXXX
-       2. FORM_ENDPOINT       → en analytics.js  (const FORM_ENDPOINT)  actual: vacío (Formspree / Apps Script / Firestore)
-       3. [TESTIMONIO REAL #1 / #2 / #3]  → sección "confianza"  (3 bloques)
-       4. [MÉTRICA REAL #1 / #2 / #3]     → sección "confianza"  (3 contadores: data-count)
-       5. (RESUELTO) Precios → sección "precios" + FAQ "¿cuánto cuesta?"
-       6. <!-- DEMO: reemplazar con video real de la app --> → sección "producto"
+       1. GA4_MEASUREMENT_ID  en analytics.js  (const GA4_ID)
+       2. FORM_ENDPOINT       en analytics.js  (const FORM_ENDPOINT)  Formspree / Apps Script / Firestore
+       3. TESTIMONIO REAL #1 / #2 / #3   seccion "confianza"  (3 bloques)
+       4. METRICA REAL #1 / #2 / #3      seccion "confianza"  (3 contadores: data-count)
+       5. (RESUELTO) Precios  seccion "precios" + FAQ "cuanto cuesta"
+       6. Video real de la demo  seccion "producto" (buscar el comentario DEMO)
        ================================================================ -->
 
   <!-- Tipografía: Archivo (display atlética, no condensada de sistema) + Inter (cuerpo) -->
@@ -119,7 +119,7 @@
                   <span class="shot__score-label">Codo</span>
                   <span class="shot__score-num">72</span>
                   <span class="shot__score-tot">/100</span>
-                  <span class="verdict verdict--yellow" role="img" aria-label="veredicto: casi">🟡</span>
+                  <span class="verdict verdict--yellow" role="img" aria-label="veredicto: casi"></span>
                 </div>
 
                 <svg class="shot__skeleton" viewBox="0 0 120 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -175,21 +175,33 @@
 
           <ul class="problem__list">
             <li class="pain">
-              <span class="pain__ico" aria-hidden="true">🎯</span>
+              <span class="pain__ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/>
+                </svg>
+              </span>
               <div>
                 <h3>Fallas y no sabes por qué</h3>
                 <p>El balón no entra, pruebas mil cosas y ninguna pega. No tienes idea de qué parte de tu tiro está rota.</p>
               </div>
             </li>
             <li class="pain">
-              <span class="pain__ico" aria-hidden="true">📉</span>
+              <span class="pain__ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 7l6 6 4-4 8 8"/><path d="M21 17v-5h-5"/>
+                </svg>
+              </span>
               <div>
                 <h3>Las apps te tiran un número y ya</h3>
                 <p>"Ángulo: 54°". ¿Y eso qué? Un dato suelto no te dice qué hacer distinto en tu próximo tiro.</p>
               </div>
             </li>
             <li class="pain">
-              <span class="pain__ico" aria-hidden="true">🔁</span>
+              <span class="pain__ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 9a8 8 0 0 1 14-3l2 2"/><path d="M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4"/><path d="M4 20v-4h4"/>
+                </svg>
+              </span>
               <div>
                 <h3>El mal hábito se queda</h3>
                 <p>Sin feedback claro, tu cuerpo memoriza el error. Mientras más practicas mal, más difícil es corregirlo.</p>
@@ -282,9 +294,9 @@
             <span class="benefit__bignum" aria-hidden="true">0–100</span>
             <h3>Un puntaje y un veredicto</h3>
             <p>Sabes al instante si vas bien:
-              <span class="verdict verdict--green">🟢 bien</span>,
-              <span class="verdict verdict--yellow">🟡 casi</span> o
-              <span class="verdict verdict--red">🔴 a corregir</span>.
+              <span class="verdict verdict--green">bien</span>,
+              <span class="verdict verdict--yellow">casi</span> o
+              <span class="verdict verdict--red">a corregir</span>.
             </p>
           </article>
 
@@ -331,7 +343,7 @@
                   <span class="shot__score-label">Codo</span>
                   <span class="shot__score-num">72</span>
                   <span class="shot__score-tot">/100</span>
-                  <span class="verdict verdict--yellow" role="img" aria-label="veredicto: casi">🟡</span>
+                  <span class="verdict verdict--yellow" role="img" aria-label="veredicto: casi"></span>
                 </div>
                 <svg class="shot__skeleton" viewBox="0 0 120 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
                   <g class="bone" stroke="#FF5A1F" stroke-width="3" stroke-linecap="round" fill="none">
@@ -399,7 +411,7 @@
             <p>
               Sube un video de frente. BallIt le dibuja el esqueleto y marca el codo
               separándose <b>41°</b> del torso cuando lo ideal es menos de 22°. El puntaje
-              sale 72/100 con veredicto 🟡. El consejo no le dice "41 grados": le dice
+              sale 72/100, en zona amarilla. El consejo no le dice "41 grados": le dice
               "mete el antebrazo bajo el balón". A la semana siguiente vuelve a grabar y
               compara: el codo ahora está en 28° y el puntaje subió. Ve su progreso, no lo intuye.
             </p>
@@ -593,6 +605,15 @@
             </select>
           </div>
 
+          <!-- Honeypot anti-spam: oculto para humanos, los bots lo llenan.
+               No usar display:none en producción real podría variar; aquí basta
+               para una landing de proyecto. aria-hidden + tabindex lo sacan del
+               flujo de teclado y lectores de pantalla. -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">No llenar este campo</label>
+            <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" />
+          </div>
+
           <!-- Campos ocultos: variante + UTMs (los rellena analytics.js) -->
           <input type="hidden" name="variant" id="fVariant" value="" />
           <input type="hidden" name="utm_source" id="fUtmSource" value="" />
@@ -650,7 +671,7 @@
     </div>
   </div>
 
-  <!-- Orden: ab-test define la variante → analytics la usa → main cablea la UI -->
+  <!-- Orden de carga: ab-test define la variante, analytics la usa, main cablea la UI -->
   <script src="ab-test.js"></script>
   <script src="analytics.js"></script>
   <script src="main.js"></script>

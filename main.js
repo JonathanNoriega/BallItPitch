@@ -76,10 +76,22 @@
         return;
       }
 
+      // Honeypot anti-spam: campo oculto que un humano nunca llena.
+      // Si viene con algo, es un bot: fingimos éxito y NO enviamos ni
+      // disparamos generate_lead (no contaminamos leads ni métricas).
+      var hp = form.querySelector('input[name="website"]');
+      if (hp && hp.value) {
+        setStatus("¡Listo! Revisa tu correo.", "ok");
+        form.reset();
+        return;
+      }
+
       fillHiddenFields(); // asegura UTM/variante frescas antes de enviar
 
       var endpoint = A ? A.formEndpoint : "";
       var data = new FormData(form);
+      // El honeypot no se envía al backend.
+      data.delete("website");
 
       // Modo demo: sin endpoint configurado no hacemos red, pero SÍ
       // consideramos éxito local para poder probar el flujo completo.

@@ -159,14 +159,25 @@ img, svg { display: block; max-width: 100%; }
 .verdict {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-family: var(--body);
   font-weight: 700;
   white-space: nowrap;
 }
+/* punto de color en vez de emoji: mantiene el semáforo 🟢🟡🔴 sin emoji */
+.verdict::before {
+  content: "";
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 18%, transparent);
+}
 .verdict--green  { color: var(--green); }
 .verdict--yellow { color: var(--yellow); }
 .verdict--red    { color: var(--red); }
+/* dentro del scorecard del mockup el chip es solo el punto (sin texto) */
+.shot__scorecard .verdict::before { box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 22%, transparent); }
 
 /* punto de acento, reemplaza el eyebrow en mayúsculas trackeado */
 .dot {
@@ -448,11 +459,11 @@ img, svg { display: block; max-width: 100%; }
 }
 .pain:first-child { border-top: 1px solid var(--line); }
 .pain__ico {
-  font-size: 26px; line-height: 1;
   width: 44px; height: 44px;
   display: grid; place-items: center;
   background: var(--orange-weak);
   border-radius: 12px;
+  color: var(--orange-700);
 }
 .pain h3 { font-family: var(--display); font-size: 20px; margin-bottom: 5px; color: var(--navy); }
 .pain p { color: var(--ink-dim); font-size: 15.5px; }
@@ -844,6 +855,13 @@ img, svg { display: block; max-width: 100%; }
 .form__status.is-err { color: var(--red); }
 .form__status.is-loading { color: var(--ink-dim); }
 .form__fine { margin-top: 12px; font-size: 12px; color: var(--ink-dim); }
+/* honeypot: fuera de pantalla, sin ocupar espacio ni recibir foco */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  overflow: hidden;
+}
 
 /* ---------------------------------------------------------------
    15. FOOTER

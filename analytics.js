@@ -22,8 +22,8 @@
   /* ============================================================
      CONFIGURACIÓN — cambia solo estas dos líneas
      ============================================================ */
-  var GA4_ID = "G-XXXXXXXXXX";            // ← tu Measurement ID de GA4
-  var FORM_ENDPOINT = "";                 // ← Formspree / Apps Script / Firestore. Vacío = modo demo (no envía a red)
+  var GA4_ID = "G-1B30K33HQ";             // ← tu Measurement ID de GA4
+  var FORM_ENDPOINT = "https://formspree.io/f/xaeelzwe";                 // ← Formspree / Apps Script / Firestore. Vacío = modo demo (no envía a red)
 
   var CONSENT_KEY = "ballit_consent";     // 'granted' | 'denied'
 
@@ -36,6 +36,20 @@
   var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
   var UTM_STORE = "ballit_utm";
 
+  // Los UTM vienen de la URL, que el usuario/atacante controla. Aunque gtag no
+  // los inyecta en el DOM, sí se guardan y se mandan al backend del formulario
+  // (de ahí a una hoja/CRM). Para evitar que un ?utm_source=<script>… se
+  // convierta en XSS almacenado en TU vista de leads, saneamos en el origen:
+  // quitamos <, >, ", ', caracteres de control, y limitamos la longitud.
+  function sanitizeUtm(v) {
+    if (typeof v !== "string") return "";
+    return v
+      .replace(/[<>"'`\\]/g, "")        // quita caracteres peligrosos para HTML/atributos
+      .replace(/[\u0000-\u001F\u007F]/g, "") // quita caracteres de control
+      .trim()
+      .slice(0, 150);                   // tope de longitud razonable para un UTM
+  }
+
   function captureUtm() {
     var params, stored = {};
     try { stored = JSON.parse(sessionStorage.getItem(UTM_STORE) || "{}"); } catch (e) { stored = {}; }
@@ -44,7 +58,7 @@
     var utm = {};
     UTM_KEYS.forEach(function (k) {
       var fromUrl = params ? params.get(k) : null;
-      utm[k] = fromUrl || stored[k] || "";  // la URL actual gana; si no, lo ya guardado
+      utm[k] = sanitizeUtm(fromUrl || stored[k] || "");  // la URL actual gana; si no, lo ya guardado
     });
 
     try { sessionStorage.setItem(UTM_STORE, JSON.stringify(utm)); } catch (e) { /* noop */ }
@@ -69,10 +83,14 @@
   });
 
   var gaLoaded = false;
+  var gaValid = !!GA4_ID && GA4_ID.indexOf("G-") === 0;
+  // Cola de eventos disparados ANTES de dar consentimiento. Al aceptar, se
+  // vacían hacia GA4 para no perder clics/conversiones del primer momento.
+  var pendingEvents = [];
 
   function loadGA() {
     if (gaLoaded) return;
-    if (!GA4_ID || GA4_ID.indexOf("G-") !== 0) {
+    if (!gaValid) {
       // Sin ID válido: no cargamos red, pero dejamos el tracking en modo log
       // para poder verificar los eventos en consola durante desarrollo.
       console.info("[BallIt] GA4_ID placeholder: eventos se registran en consola, no se envían.");
@@ -81,7 +99,8 @@
     }
     var s = document.createElement("script");
     s.async = true;
-    s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
+    s.referrerPolicy = "strict-origin-when-cross-origin";
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA4_ID);
     document.head.appendChild(s);
 
     gtag("js", new Date());
@@ -93,6 +112,10 @@
     gtag("set", "user_properties", { variant: VARIANT });
 
     gaLoaded = true;
+
+    // Vaciar la cola de eventos previos al consentimiento.
+    pendingEvents.forEach(function (ev) { window.gtag("event", ev.name, ev.params); });
+    pendingEvents = [];
   }
 
   function grantConsent() {
@@ -107,8 +130,13 @@
      ============================================================ */
   function track(eventName, params) {
     var payload = Object.assign({ variant: VARIANT }, params || {});
-    if (typeof window.gtag === "function" && gaLoaded && GA4_ID.indexOf("G-") === 0) {
+    if (gaValid && gaLoaded && typeof window.gtag === "function") {
       window.gtag("event", eventName, payload);
+    } else if (gaValid) {
+      // ID válido pero aún sin consentimiento: encolar para no perder el evento.
+      // Límite defensivo para que un bucle no infle memoria.
+      if (pendingEvents.length < 100) pendingEvents.push({ name: eventName, params: payload });
+      console.debug("[BallIt event · en cola]", eventName, payload);
     } else {
       console.debug("[BallIt event]", eventName, payload);
     }
