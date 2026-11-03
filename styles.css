@@ -375,13 +375,15 @@ img, svg { display: block; max-width: 100%; }
 }
 .shot { position: absolute; inset: 0; background: radial-gradient(130% 80% at 50% 6%, #1C2B45 0%, #070C15 72%); }
 
-/* Video real de la demo: llena la pantalla del teléfono (vertical). */
+/* Video real de la demo: se ve COMPLETO dentro de la pantalla, sin recortar.
+   'contain' muestra todo el cuadro; si el video no es exactamente 9:19 quedan
+   franjas (letterbox) del color de fondo en vez de cortar la imagen. */
 .shot-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   background: #070C15;
 }
 .shot__glow {
@@ -642,8 +644,7 @@ img, svg { display: block; max-width: 100%; }
 .product__lead { color: var(--on-dark-dim); font-size: 17px; max-width: 420px; margin: 16px 0 18px; }
 .product__meta { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; color: var(--on-dark-dim); }
 .product__stage { justify-self: center; transform: rotate(-2deg); }
-/* El teléfono de la demo es más grande para que el video se vea bien */
-.phone--demo { width: 340px; }
+
 
 /* ---------------------------------------------------------------
    11. CONFIANZA

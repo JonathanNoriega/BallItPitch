@@ -179,6 +179,19 @@
       video.currentTime = ratio * video.duration;
       setVisual(ratio * 100);
     }
+    // Ajusta la pantalla del teléfono a la relación de aspecto REAL del video,
+    // así se ve completo y sin franjas (no forzamos 9:19 sobre un 9:16).
+    if (video) {
+      video.addEventListener("loadedmetadata", function () {
+        if (video.videoWidth && video.videoHeight) {
+          var screen = video.closest(".phone__screen");
+          if (screen) {
+            screen.style.aspectRatio = video.videoWidth + " / " + video.videoHeight;
+          }
+        }
+      });
+    }
+
     if (video && bar) {
       video.addEventListener("timeupdate", function () {
         if (video.duration) setVisual((video.currentTime / video.duration) * 100);
