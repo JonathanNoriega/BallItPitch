@@ -374,6 +374,16 @@ img, svg { display: block; max-width: 100%; }
   background: #0A0F18;
 }
 .shot { position: absolute; inset: 0; background: radial-gradient(130% 80% at 50% 6%, #1C2B45 0%, #070C15 72%); }
+
+/* Video real de la demo: llena la pantalla del teléfono (vertical). */
+.shot-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #070C15;
+}
 .shot__glow {
   position: absolute;
   bottom: -50px; left: 50%;
@@ -595,43 +605,43 @@ img, svg { display: block; max-width: 100%; }
    11. CONFIANZA
    --------------------------------------------------------------- */
 .trust { padding: 94px 0; background: var(--paper-2); }
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 52px;
-}
-.metric {
-  text-align: center;
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 28px 20px;
-}
-.metric__num {
-  display: block;
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: clamp(38px, 5vw, 54px);
-  color: var(--orange);
-  line-height: 1;
-  margin-bottom: 10px;
-}
-.metric__label { font-size: 13px; color: var(--ink-dim); line-height: 1.4; }
 
-.trust__grid {
+/* Historia de usuaria: foto + perfil/narrativa, dos columnas */
+.story {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 28px;
-  align-items: start;
-}
-.usecase {
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 0;
   background: var(--navy);
-  color: var(--on-dark);
-  border-radius: 20px;
-  padding: 34px 32px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(18, 32, 54, 0.22);
 }
-.usecase__badge {
+.story__photo {
+  position: relative;
+  margin: 0;
+}
+.story__photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+.story__photo figcaption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 40px 24px 20px;
+  background: linear-gradient(transparent, rgba(7, 12, 21, 0.9));
+  color: #fff;
+}
+.story__name { font-family: var(--display); font-weight: 800; font-size: 24px; }
+.story__meta { font-size: 13px; color: var(--on-dark-dim); }
+
+.story__body { padding: 40px 42px; }
+.story__badge {
   display: inline-block;
   font-family: var(--display);
   font-weight: 700;
@@ -640,22 +650,27 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: 0.04em;
   margin-bottom: 14px;
 }
-.usecase h3 { color: #fff; font-family: var(--display); font-size: 24px; margin-bottom: 14px; }
-.usecase p { color: var(--on-dark-dim); font-size: 15.5px; }
-.usecase b { color: #fff; }
-.usecase__foot { font-size: 12.5px; color: var(--navy-soft); margin-top: 16px; font-style: italic; }
-
-.quotes { display: grid; gap: 16px; }
-.quote {
-  margin: 0;
-  background: var(--white);
-  border: 1px dashed var(--line);
-  border-left: 3px solid var(--orange);
-  border-radius: 14px;
-  padding: 20px 22px;
+.story__lead { color: #fff; font-size: 18px; line-height: 1.5; margin-bottom: 22px; }
+.story__points { list-style: none; padding: 0; display: grid; gap: 16px; margin-bottom: 22px; }
+.story__points li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--on-dark-dim);
+  font-size: 15.5px;
+  line-height: 1.5;
 }
-.quote p { color: var(--ink-dim); font-size: 14.5px; font-style: italic; }
-.quote--empty { background: repeating-linear-gradient(135deg, #fff, #fff 10px, #FBF6EF 10px, #FBF6EF 20px); }
+.story__points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 8px;
+  width: 9px; height: 9px;
+  background: var(--orange);
+  border-radius: 50%;
+}
+.story__points strong { color: #fff; font-weight: 600; }
+.story__points b { color: var(--orange); }
+.story__foot { font-size: 12.5px; color: var(--navy-soft); font-style: italic; margin-bottom: 24px; }
+.story__body .btn--solid { margin-top: 0; }
 
 /* ---------------------------------------------------------------
    12. COSTO DE INACCIÓN
@@ -1002,8 +1017,8 @@ img, svg { display: block; max-width: 100%; }
   .product__grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
   .product__lead, .product__meta { margin-left: auto; margin-right: auto; }
   .product__stage { justify-self: center; }
-  .metrics { grid-template-columns: 1fr; }
-  .trust__grid { grid-template-columns: 1fr; }
+  .story { grid-template-columns: 1fr; }
+  .story__photo img { min-height: 320px; max-height: 420px; }
   .signup__grid { grid-template-columns: 1fr; gap: 36px; }
   .plans { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
   .plan--featured { transform: none; }

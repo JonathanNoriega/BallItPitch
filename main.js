@@ -166,11 +166,15 @@
       btn.classList.add("is-hidden");
 
       if (video && typeof video.play === "function") {
-        // Video real: eventos nativos
-        video.play();
+        // Video real: mostramos los controles nativos (pausa/scrub/volumen),
+        // útil para un clip largo, y usamos los eventos nativos del elemento.
+        video.setAttribute("controls", "");
+        var p = video.play();
+        if (p && typeof p.catch === "function") {
+          p.catch(function () { btn.classList.remove("is-hidden"); });
+        }
         video.addEventListener("ended", function () {
           if (A) A.videoComplete();
-          btn.classList.remove("is-hidden");
         }, { once: true });
       } else {
         // Mock: simulamos la reproducción para poder medir "complete".
