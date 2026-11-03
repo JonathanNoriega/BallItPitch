@@ -458,6 +458,49 @@ img, svg { display: block; max-width: 100%; }
 .playbtn svg { margin-left: 3px; }
 .playbtn.is-hidden { display: none; }
 
+/* Barra de progreso del video: delgada, arrastrable, sin controles nativos */
+.vprogress {
+  position: absolute;
+  left: 14px; right: 14px; bottom: 14px;
+  height: 16px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  touch-action: none;
+}
+.vprogress[hidden] { display: none; }
+.vprogress::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 4px;
+  background: rgba(255,255,255,0.28);
+  border-radius: 999px;
+}
+.vprogress__fill {
+  position: absolute;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: var(--orange);
+  border-radius: 999px;
+}
+.vprogress__knob {
+  position: absolute;
+  left: 0;
+  width: 12px; height: 12px;
+  margin-left: -6px;
+  background: #fff;
+  border: 2px solid var(--orange);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: transform .12s ease;
+}
+.vprogress:hover .vprogress__knob,
+.vprogress:focus-visible .vprogress__knob { transform: scale(1.15); }
+.vprogress:focus-visible { outline: none; }
+
 /* ---------------------------------------------------------------
    7. PROBLEMA
    --------------------------------------------------------------- */
@@ -599,7 +642,8 @@ img, svg { display: block; max-width: 100%; }
 .product__lead { color: var(--on-dark-dim); font-size: 17px; max-width: 420px; margin: 16px 0 18px; }
 .product__meta { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; color: var(--on-dark-dim); }
 .product__stage { justify-self: center; transform: rotate(-2deg); }
-.phone--demo .shot--demo { filter: saturate(0.92); }
+/* El teléfono de la demo es más grande para que el video se vea bien */
+.phone--demo { width: 340px; }
 
 /* ---------------------------------------------------------------
    11. CONFIANZA

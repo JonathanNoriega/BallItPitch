@@ -160,23 +160,78 @@
     var btn = document.getElementById("demoPlay");
     if (!btn) return;
     var video = document.getElementById("demoVideo"); // existe solo si ya hay video real
+    var bar = document.getElementById("demoProgress");
+    var fill = document.getElementById("demoProgressFill");
+    var knob = document.getElementById("demoProgressKnob");
+
+    // --- Barra de progreso personalizada (sin controles nativos) ----------
+    function setVisual(pct) {
+      pct = Math.max(0, Math.min(100, pct));
+      if (fill) fill.style.width = pct + "%";
+      if (knob) knob.style.left = pct + "%";
+      if (bar) bar.setAttribute("aria-valuenow", String(Math.round(pct)));
+    }
+    function seekToClientX(clientX) {
+      if (!video || !bar || !video.duration) return;
+      var rect = bar.getBoundingClientRect();
+      var ratio = (clientX - rect.left) / rect.width;
+      ratio = Math.max(0, Math.min(1, ratio));
+      video.currentTime = ratio * video.duration;
+      setVisual(ratio * 100);
+    }
+    if (video && bar) {
+      video.addEventListener("timeupdate", function () {
+        if (video.duration) setVisual((video.currentTime / video.duration) * 100);
+      });
+
+      var dragging = false;
+      bar.addEventListener("pointerdown", function (e) {
+        dragging = true;
+        bar.setPointerCapture(e.pointerId);
+        seekToClientX(e.clientX);
+      });
+      bar.addEventListener("pointermove", function (e) {
+        if (dragging) seekToClientX(e.clientX);
+      });
+      bar.addEventListener("pointerup", function () { dragging = false; });
+      bar.addEventListener("pointercancel", function () { dragging = false; });
+
+      // Teclado: flechas mueven ±5 s
+      bar.addEventListener("keydown", function (e) {
+        if (!video.duration) return;
+        if (e.key === "ArrowRight") { video.currentTime = Math.min(video.duration, video.currentTime + 5); e.preventDefault(); }
+        else if (e.key === "ArrowLeft") { video.currentTime = Math.max(0, video.currentTime - 5); e.preventDefault(); }
+      });
+    }
+
+    // Clic sobre el video: pausa/reanuda. El botón de play reaparece en pausa.
+    if (video) {
+      video.style.cursor = "pointer";
+      video.addEventListener("click", function () {
+        if (video.paused) { video.play(); btn.classList.add("is-hidden"); }
+        else { video.pause(); btn.classList.remove("is-hidden"); }
+      });
+    }
+
+    var started = false; // para no duplicar video_play al reanudar
 
     btn.addEventListener("click", function () {
-      if (A) A.videoPlay();
       btn.classList.add("is-hidden");
 
       if (video && typeof video.play === "function") {
-        // Video real: mostramos los controles nativos (pausa/scrub/volumen),
-        // útil para un clip largo, y usamos los eventos nativos del elemento.
-        video.setAttribute("controls", "");
+        // Video real SIN controles nativos. video_play solo la primera vez.
+        if (!started) { started = true; if (A) A.videoPlay(); }
+        if (bar) bar.hidden = false; // mostrar la barra al empezar
         var p = video.play();
         if (p && typeof p.catch === "function") {
           p.catch(function () { btn.classList.remove("is-hidden"); });
         }
         video.addEventListener("ended", function () {
           if (A) A.videoComplete();
+          btn.classList.remove("is-hidden");
         }, { once: true });
       } else {
+        if (A) A.videoPlay();
         // Mock: simulamos la reproducción para poder medir "complete".
         var delay = reduceMotion ? 0 : 2600;
         setTimeout(function () {

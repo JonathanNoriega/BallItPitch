@@ -347,6 +347,13 @@
               <button class="playbtn" id="demoPlay" aria-label="Reproducir demo del análisis">
                 <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
               </button>
+
+              <!-- Barra de progreso delgada y arrastrable (sin fullscreen ni opciones) -->
+              <div class="vprogress" id="demoProgress" role="slider" tabindex="0"
+                   aria-label="Progreso del video" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+                <div class="vprogress__fill" id="demoProgressFill"></div>
+                <div class="vprogress__knob" id="demoProgressKnob"></div>
+              </div>
             </div>
           </div>
           <span class="product__caption">Demo del análisis · dale play</span>
