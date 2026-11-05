@@ -52,6 +52,7 @@
         <a href="#problema">El problema</a>
         <a href="#pasos">Cómo funciona</a>
         <a href="#producto">Ver el producto</a>
+        <a href="#resenas">Reseñas</a>
         <a href="#precios">Precios</a>
         <a href="#faq">Preguntas</a>
       </nav>
@@ -408,8 +409,8 @@
             </ul>
             <p class="story__foot">
               Perfil de jugadora objetivo que ilustra el uso del producto. No es un
-              testimonio: cuando tengamos reseñas reales de quienes prueben el prototipo,
-              irán aquí.
+              testimonio: es el perfil de jugadora al que apunta BallIt. Las reseñas
+              reales de quienes ya lo probaron están abajo.
             </p>
             <a href="https://ball-it-fd.vercel.app/" target="_blank" rel="noopener"
                class="btn btn--solid js-cta" data-cta-id="confianza" data-cta-location="story">
@@ -417,6 +418,66 @@
             </a>
           </div>
         </article>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         RESEÑAS — testimonios reales de quienes probaron el prototipo
+         ============================================================ -->
+    <section class="reviews" id="resenas">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-title">Lo que dicen quienes ya lo probaron</h2>
+          <p class="section-head__lead">
+            Reseñas reales de jugadores que analizaron su tiro con el prototipo de BallIt.
+          </p>
+        </header>
+
+        <div class="reviews__grid">
+          <article class="review">
+            <div class="review__stars" role="img" aria-label="5 de 5 estrellas">
+              <span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span>
+            </div>
+            <p class="review__text">Me parece que la aplicación tiene un gran valor y resulta muy útil para un perfil como el mío. Yo no tengo mucho tiempo por la universidad, por lo que cuando juego lo hago por lo general sola; con esta app tengo la oportunidad de entender cuáles son mis errores al momento de tirar, y me sirve para corregirlos lo más rápido posible y evitar seguir repitiéndolos. Mi única queja es que me dice el ángulo que abro el codo al tirar, pero no cuál debería ser un buen ángulo, entonces no comprendo bien si está bien o mal lo que hago.</p>
+            <footer class="review__by">
+              <span class="review__name">Anónimo</span>
+              <span class="review__level">Principiante</span>
+            </footer>
+          </article>
+
+          <article class="review">
+            <div class="review__stars" role="img" aria-label="5 de 5 estrellas">
+              <span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span>
+            </div>
+            <p class="review__text">Ayudó muchísimo a corregir mi técnica, pasé de 2/10 tiros a 7/10. Definitivamente es útil.</p>
+            <footer class="review__by">
+              <span class="review__name">Juan David</span>
+              <span class="review__level">Principiante</span>
+            </footer>
+          </article>
+
+          <article class="review">
+            <div class="review__stars" role="img" aria-label="5 de 5 estrellas">
+              <span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span>
+            </div>
+            <p class="review__text">La app está muy bien optimizada y ayuda mucho a entender los errores que uno comete; por ejemplo, me indicó que debo mejorar la velocidad con la que alineo el balón con la línea del cuerpo. También muestra el porcentaje de tiros con buena mecánica de codo, y eso motiva a mejorar ese porcentaje. En general me parece muy útil para jugadores que no tienen un entrenador que los ayude con los errores de su tiro.</p>
+            <footer class="review__by">
+              <span class="review__name">Martín</span>
+              <span class="review__level">Competitivo</span>
+            </footer>
+          </article>
+
+          <article class="review">
+            <div class="review__stars" role="img" aria-label="4 de 5 estrellas">
+              <span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span class="is-on">★</span><span>★</span>
+            </div>
+            <p class="review__text">Es una app interesante; me gustó sobre todo poder ver el video con el esqueleto y el punto en el que fallo. Siento que sí puede ayudarme bastante y el feedback es efectivo, aunque con solo mirar el codo no basta para determinar si un tiro va a ser bueno.</p>
+            <footer class="review__by">
+              <span class="review__name">Juan</span>
+              <span class="review__level">Intermedio</span>
+            </footer>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -584,6 +645,12 @@
             </div>
             <p class="form__err" id="ratingErr" hidden>Elige una puntuación.</p>
           </fieldset>
+
+          <div class="form__row">
+            <label for="name">Tu nombre <span class="form__opt">(opcional)</span></label>
+            <input type="text" id="name" name="name" autocomplete="name" maxlength="60"
+                   placeholder="Como quieres aparecer en tu reseña" />
+          </div>
 
           <div class="form__row">
             <label for="review">Tu reseña <span aria-hidden="true">*</span></label>

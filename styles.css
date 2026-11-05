@@ -718,6 +718,55 @@ img, svg { display: block; max-width: 100%; }
 .story__body .btn--solid { margin-top: 0; }
 
 /* ---------------------------------------------------------------
+   11b. RESEÑAS
+   --------------------------------------------------------------- */
+.reviews { padding: 94px 0; background: var(--paper); }
+.reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.review {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 26px 26px 22px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+}
+.review__stars {
+  font-size: 18px;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+  color: var(--line);
+}
+.review__stars .is-on { color: var(--orange); }
+.review__text {
+  color: var(--ink);
+  font-size: 15.5px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  flex: 1;
+}
+.review__by {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.review__name { font-family: var(--display); font-weight: 700; color: var(--navy); font-size: 16px; }
+.review__level {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--orange);
+  background: var(--orange-weak);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* ---------------------------------------------------------------
    12. COSTO DE INACCIÓN
    --------------------------------------------------------------- */
 .inaction {
@@ -1064,6 +1113,7 @@ img, svg { display: block; max-width: 100%; }
   .product__stage { justify-self: center; }
   .story { grid-template-columns: 1fr; }
   .story__photo img { min-height: 320px; max-height: 420px; }
+  .reviews__grid { grid-template-columns: 1fr; }
   .signup__grid { grid-template-columns: 1fr; gap: 36px; }
   .plans { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
   .plan--featured { transform: none; }
