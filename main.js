@@ -365,6 +365,30 @@
   }
 
   /* ------------------------------------------------------------
+     Tema claro/oscuro: el estado inicial lo fija el script inline del
+     <head> (sin parpadeo). Aquí solo cableamos el botón y persistimos.
+     ------------------------------------------------------------ */
+  function wireThemeToggle() {
+    var btn = document.getElementById("themeToggle");
+    if (!btn) return;
+    var root = document.documentElement;
+
+    function sync() {
+      var isDark = root.getAttribute("data-theme") === "dark";
+      btn.setAttribute("aria-pressed", String(isDark));
+    }
+    sync();
+
+    btn.addEventListener("click", function () {
+      var isDark = root.getAttribute("data-theme") === "dark";
+      if (isDark) root.removeAttribute("data-theme");
+      else root.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("ballit_theme", isDark ? "light" : "dark"); } catch (e) {}
+      sync();
+    });
+  }
+
+  /* ------------------------------------------------------------
      7) FAQ en acordeón: al abrir una pregunta, las demás se cierran.
         analytics.js escucha 'toggle' para faq_open pero solo registra
         al ABRIR (item.open === true), así que cerrar las otras aquí no
@@ -394,6 +418,7 @@
     wireSkeletons();
     wireCounters();
     wireFaqAccordion();
+    wireThemeToggle();
   }
 
   if (document.readyState === "loading") {
