@@ -808,6 +808,17 @@ img, svg { display: block; max-width: 100%; }
 .trydemo__improve-title { color: #fff !important; font-weight: 600; margin-bottom: 2px; }
 .trydemo__n { font-size: 13px; color: var(--navy-soft); margin-bottom: 18px; }
 .trydemo__err { color: var(--on-dark-dim); font-size: 16px; margin-bottom: 18px; }
+.shot-video-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+  font-size: 13px;
+  color: var(--on-dark-dim);
+  background: #070C15;
+}
 
 /* ---------------------------------------------------------------
    11. CONFIANZA

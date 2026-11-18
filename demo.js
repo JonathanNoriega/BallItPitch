@@ -171,7 +171,8 @@
     showPanel();
     showState(sOriginal);
 
-    // Video ORIGINAL dentro del teléfono
+    // Video ORIGINAL dentro del teléfono. Si no carga, mostramos un aviso
+    // pero dejamos el botón "Analizar este tiro" para que el flujo siga.
     clearScreen();
     var v = document.createElement("video");
     v.className = "shot-video";
@@ -179,7 +180,15 @@
     if (d.thumb_url) v.poster = API_BASE + d.thumb_url;
     v.controls = true; v.playsInline = true; v.muted = true;
     v.preload = "metadata";
-    v.addEventListener("error", function () { showError(); });
+    v.addEventListener("error", function () {
+      v.hidden = true;
+      if (screenEl && !screenEl.querySelector(".shot-video-fallback")) {
+        var note = document.createElement("div");
+        note.className = "shot-video-fallback";
+        note.textContent = "No se pudo cargar el video, pero puedes analizar el tiro.";
+        screenEl.appendChild(note);
+      }
+    });
     screenEl.appendChild(v);
 
     if (titleEl) titleEl.textContent = d.title || "Tu tiro de ejemplo";
@@ -228,14 +237,24 @@
 
     showState(sResult);
 
-    // Video ANOTADO
+    // Video ANOTADO. Si el video no carga, NO tumbamos el resultado:
+    // el feedback (puntaje, veredicto, consejo) es lo importante y se queda.
     clearScreen();
     var v = document.createElement("video");
     v.className = "shot-video";
     v.src = API_BASE + (detail.annotated_url || "");
     v.controls = true; v.playsInline = true; v.muted = true;
     v.preload = "metadata";
-    v.addEventListener("error", function () { showError(); });
+    v.addEventListener("error", function () {
+      // Oculta el video roto y deja un aviso; mantiene el feedback visible.
+      v.hidden = true;
+      if (screenEl && !screenEl.querySelector(".shot-video-fallback")) {
+        var note = document.createElement("div");
+        note.className = "shot-video-fallback";
+        note.textContent = "El video no se pudo cargar, pero aquí está tu análisis.";
+        screenEl.appendChild(note);
+      }
+    });
     screenEl.appendChild(v);
 
     // Puntaje
