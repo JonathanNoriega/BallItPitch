@@ -32,6 +32,8 @@ evento de conversión principal en GA4.
 - `click_cta` con `cta_id="registro_abrir_app"` y los CTA principales: clics que
   abren el prototipo (intención de probarlo).
 - `video_play` / `video_complete`: interés en ver el producto en acción.
+- `demo_select` / `demo_analyze` / `demo_result_view`: embudo del mini-MVP de
+  la sección "Pruébalo ahora" (elige ejemplo → analiza → ve resultado).
 - `faq_open` (por pregunta): qué objeciones pesan antes de decidir.
 - Engagement time y engaged sessions / bounce (nativos de GA4).
 - Todas segmentables por `variant` (A/B).

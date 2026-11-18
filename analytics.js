@@ -13,6 +13,8 @@
    Eventos (nombres exactos pedidos):
      page_view (auto), click_cta, form_start, generate_lead,
      scroll_depth, video_play, video_complete, faq_open.
+   Eventos del mini-MVP de la sección #prueba:
+     demo_select, demo_analyze, demo_result_view.
    Todos incluyen el parámetro `variant` (A/B), y `variant` se envía
    además como user property.
    ================================================================ */
@@ -214,6 +216,11 @@
     // video de demo
     videoPlay: function () { track("video_play", {}); },
     videoComplete: function () { track("video_complete", {}); },
+
+    // mini-MVP de la sección #prueba (embudo: elige → analiza → ve resultado)
+    demoSelect: function (slug) { track("demo_select", { demo_slug: slug }); },
+    demoAnalyze: function (slug) { track("demo_analyze", { demo_slug: slug }); },
+    demoResult: function (slug, score) { track("demo_result_view", { demo_slug: slug, score: score }); },
 
     // generate_lead — SOLO lo llama main.js tras envío exitoso.
     // Incluye las UTM como parámetros además de ir en los campos ocultos.

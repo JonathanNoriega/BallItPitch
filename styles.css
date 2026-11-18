@@ -702,6 +702,199 @@ img, svg { display: block; max-width: 100%; }
 
 
 /* ---------------------------------------------------------------
+   10a. PRUEBA — mini-MVP interactivo (datos del back)
+   --------------------------------------------------------------- */
+.trydemo {
+  padding: 94px 0;
+  background:
+    radial-gradient(760px 420px at 20% 0%, rgba(255,90,31,0.1), transparent 60%),
+    var(--navy-2);
+}
+.trydemo__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.democard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--navy-soft);
+  border-radius: 18px;
+  padding: 14px;
+  cursor: pointer;
+  color: var(--on-dark);
+  transition: border-color .14s ease, transform .14s ease;
+}
+.democard:hover { border-color: var(--orange); transform: translateY(-3px); }
+.democard__thumb {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0A0F18;
+  display: block;
+}
+.democard__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.democard__title { font-family: var(--display); font-weight: 700; font-size: 18px; color: #fff; }
+.democard__desc { font-size: 14px; color: var(--on-dark-dim); }
+.democard__tag { font-size: 13px; }
+
+/* skeletons de carga */
+.democard--skeleton { pointer-events: none; }
+.democard--skeleton span {
+  display: block;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.12) 37%, rgba(255,255,255,0.05) 63%);
+  background-size: 400% 100%;
+  animation: demo-shimmer 1.3s ease infinite;
+}
+.democard--skeleton span:nth-child(1) { width: 100%; aspect-ratio: 16 / 10; }
+.democard--skeleton span:nth-child(2) { width: 60%; height: 16px; }
+.democard--skeleton span:nth-child(3) { width: 85%; height: 13px; }
+@keyframes demo-shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+/* panel del demo */
+.trydemo__back {
+  background: none; border: none; cursor: pointer;
+  color: var(--on-dark-dim);
+  font-family: var(--body); font-weight: 600; font-size: 14px;
+  padding: 0; margin-bottom: 22px;
+}
+.trydemo__back:hover { color: var(--orange); }
+.trydemo__stage {
+  display: grid;
+  grid-template-columns: 0.7fr 1fr;
+  gap: 44px;
+  align-items: center;
+}
+.phone--try { justify-self: center; }
+.trydemo__side { color: var(--on-dark); }
+.trydemo__h3 { font-family: var(--display); font-weight: 700; font-size: 24px; color: #fff; margin-bottom: 10px; }
+.trydemo__desc { color: var(--on-dark-dim); font-size: 16px; margin-bottom: 22px; }
+
+/* procesando */
+.trydemo__step { color: var(--on-dark-dim); font-size: 15px; margin-bottom: 14px; }
+.trydemo__progress { height: 6px; background: rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
+.trydemo__progress-fill { height: 100%; width: 0%; background: var(--orange); border-radius: 999px; }
+
+/* resultado */
+.trydemo__scorebox { display: flex; align-items: center; gap: 18px; margin-bottom: 18px; }
+.trydemo__ring {
+  --pct: 0;
+  width: 92px; height: 92px; flex: none;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background:
+    radial-gradient(closest-side, var(--navy-2) 70%, transparent 71%),
+    conic-gradient(var(--orange) calc(var(--pct) * 1%), rgba(255,255,255,0.12) 0);
+  position: relative;
+}
+.trydemo__score { font-family: var(--display); font-weight: 800; font-size: 32px; color: #fff; line-height: 1; }
+.trydemo__score-tot { position: absolute; bottom: 20px; font-size: 11px; color: var(--on-dark-dim); }
+.trydemo__scorebox .verdict { font-size: 16px; }
+.trydemo__coach { color: #fff; font-size: 16px; line-height: 1.5; margin-bottom: 16px; }
+.trydemo__label {
+  display: inline-block;
+  font-family: var(--display); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 4px;
+}
+.trydemo__good, .trydemo__improve { margin-bottom: 14px; }
+.trydemo__good p, .trydemo__improve p { color: var(--on-dark-dim); font-size: 14.5px; }
+.trydemo__improve-title { color: #fff !important; font-weight: 600; margin-bottom: 2px; }
+.trydemo__n { font-size: 13px; color: var(--navy-soft); margin-bottom: 18px; }
+.trydemo__err { color: var(--on-dark-dim); font-size: 16px; margin-bottom: 18px; }
+
+/* ---------------------------------------------------------------
+   10b. PARTIDO NBA — box score (datos de ejemplo)
+   --------------------------------------------------------------- */
+.game {
+  padding: 94px 0;
+  background:
+    radial-gradient(760px 420px at 80% 0%, rgba(255,90,31,0.12), transparent 60%),
+    var(--navy-2);
+}
+.scorecard {
+  max-width: 680px;
+  margin: 0 auto;
+  background: linear-gradient(160deg, #15233c 0%, #0e1a2e 100%);
+  border: 1px solid var(--navy-soft);
+  border-radius: 24px;
+  padding: 40px 36px 28px;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+}
+.scorecard__badge {
+  position: absolute;
+  top: 20px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--on-dark-dim);
+  border: 1px solid var(--navy-soft);
+  padding: 4px 14px;
+  border-radius: 999px;
+}
+.scorecard__teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  margin: 28px 0 32px;
+}
+.team { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.team__logo { color: var(--orange); }
+.team--home .team__logo { color: var(--mint); }
+.team__name { font-family: var(--display); font-weight: 700; font-size: 22px; color: #fff; }
+.team__abbr { font-size: 12px; color: var(--on-dark-dim); letter-spacing: 0.08em; }
+.scorecard__score { display: flex; align-items: baseline; gap: 10px; }
+.scorecard__num {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(40px, 7vw, 58px);
+  color: var(--on-dark-dim);
+  line-height: 1;
+}
+.scorecard__num--win { color: #fff; }
+.scorecard__dash { color: var(--on-dark-dim); font-size: 28px; }
+
+.scorecard__leaders {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-top: 1px solid var(--navy-soft);
+  padding-top: 24px;
+}
+.leader {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--navy-soft);
+  border-radius: 14px;
+  padding: 16px 16px 12px;
+}
+.leader__team {
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--orange);
+  margin-bottom: 4px;
+}
+.leader__name { display: block; font-family: var(--display); font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 12px; }
+.leader__stats { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.leader__stats li { display: flex; flex-direction: column; align-items: center; }
+.leader__stats b { font-family: var(--display); font-weight: 700; font-size: 18px; color: #fff; line-height: 1; }
+.leader__stats span { font-size: 10px; color: var(--on-dark-dim); letter-spacing: 0.04em; margin-top: 3px; }
+.scorecard__note { text-align: center; font-size: 12px; color: var(--navy-soft); font-style: italic; margin-top: 20px; }
+
+/* ---------------------------------------------------------------
    11. CONFIANZA
    --------------------------------------------------------------- */
 .trust { padding: 94px 0; background: var(--paper-2); }
@@ -1169,6 +1362,9 @@ img, svg { display: block; max-width: 100%; }
   .story { grid-template-columns: 1fr; }
   .story__photo img { min-height: 320px; max-height: 420px; }
   .reviews__grid { grid-template-columns: 1fr; }
+  .scorecard__leaders { grid-template-columns: 1fr; }
+  .trydemo__cards { grid-template-columns: 1fr; }
+  .trydemo__stage { grid-template-columns: 1fr; gap: 32px; }
   .signup__grid { grid-template-columns: 1fr; gap: 36px; }
   .plans { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
   .plan--featured { transform: none; }

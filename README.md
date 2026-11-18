@@ -107,6 +107,22 @@ No se reimplementan: los da GA4.
   métricas "Sesiones con interacción" y "Tasa de rebote". Segmenta por la user
   property `variant` para comparar A vs B.
 
+### 6. Mini-MVP de la sección "Pruébalo ahora" (`demo.js`)
+
+La sección `#prueba` deja al visitante elegir un tiro de ejemplo y vivir el
+análisis con datos del back (`API_BASE` en `demo.js`, hoy
+`https://ballit-api.onrender.com`). Métricas secundarias del embudo, todas
+segmentables por `variant`:
+
+- `demo_select` (parámetro `demo_slug`): eligió un ejemplo.
+- `demo_analyze` (`demo_slug`): pulsó "Analizar este tiro".
+- `demo_result_view` (`demo_slug`, `score`): vio el resultado anotado.
+- `click_cta` con `cta_id="demo_resultado"`: clic al CTA desde el resultado.
+
+Degradación: si el back está dormido/caído o `/demos` no responde en ~60 s, la
+sección queda **oculta** y el resto de la landing funciona igual (solo un
+`console.warn`). Para cambiar la URL del back, edita `API_BASE` en `demo.js`.
+
 ---
 
 ## Placeholders a llenar antes de publicar "en serio"
